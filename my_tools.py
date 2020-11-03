@@ -25,3 +25,12 @@ def convert_date_era_r(hours):
     else:
         actual_time = init_time + pd.Timedelta(hours,unit='h')
     return actual_time
+
+def weighted_average_area(Dataset):
+	lons,lats = np.meshgrid(Dataset.lon,Dataset.lat)
+	var_name = list(Dataset.keys())[0]
+	numerator = np.sum(Dataset[var_name]*np.cos(np.deg2rad(lats)))
+	denominator = np.sum(np.cos(np.deg2rad(lats)))
+	weighted_area = numerator/denominator
+	return weighted_area
+
