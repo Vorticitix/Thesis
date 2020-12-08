@@ -1,0 +1,4 @@
+- Discuss if exit zones of high RWP activity coincide with Rossby wave breaking and may be regions with enhanced likelihood for extreme weather
+
+- Consider GFS Histograms: Discuss hypothesis that GFS is able to forecast RWPs on long range forecasts but only if the RWP is already initialized
+

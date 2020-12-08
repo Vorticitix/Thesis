@@ -1,0 +1,13 @@
+RWP Climatologies
+Grazzini and Lucarini (2011)
+https://arxiv.org/pdf/1011.3564.pdf
+
+Souders et al 2014
+https://doi.org/10.1175/MWR-D-13-00371.1
+
+RWP forecasting
+Glatt and Wirth (2014)
+https://doi.org/10.1002/qj.2139
+
+
+

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import xarray as xr
 
 plot_dic = {
     'envelope':{'data_variable':'v','title':'Envelope','label':'E (m/s)','filename':'envelope'},
@@ -59,7 +60,7 @@ def convert_date_era_r(hours):
     return actual_time
 
 #The function below receives a 2D xarray dataset and returns one value for latitude weighted mean
-def weighted_average_area(Dataset):
+def weighted_average_area_2D(Dataset):
     #create 2D grid with latitude weights. 
 	lons,lats = np.meshgrid(Dataset.lon,Dataset.lat)
     #list datavariable name
@@ -70,3 +71,30 @@ def weighted_average_area(Dataset):
 	weighted_area = numerator/denominator
 	return weighted_area
 
+def weighted_average_area_3D(Dataset,variable):
+    #create 2D grid with latitude weights. 
+	lons,lats = np.meshgrid(Dataset.lon,Dataset.lat)
+	
+	var_name = list(Dataset.keys())[0]	
+	#make 3D array of lats
+	lats_3D = np.repeat(lats[np.newaxis,:,:],len(Dataset.time),axis=0)
+	#For wave speed values we only want to get an average if we have 25% of values that are not nan
+	if variable=='phasespeed':
+		#Count number of not_nans in dataset for each timestep
+		counts_non_nan = np.count_nonzero(np.invert(np.isnan(Dataset[var_name].values)),axis=(1,2))
+		boolean = counts_non_nan > (len(lons)*len(lats))*0.2
+		#Calculate latitude weighted mean only for timesteps where more than 25% of values are defined
+		numerator = np.nansum(Dataset[var_name][boolean,:,:]*np.cos(np.deg2rad(lats_3D[boolean,:,:])),axis=(1,2))
+		denominator = np.nansum(np.cos(np.deg2rad(lats_3D[boolean,:,:])),axis=(1,2))
+		weighted_area_np = numerator/denominator
+		weighted_area = xr.Dataset(data_vars=dict(
+			v=(['time'], weighted_area_np)),coords=dict(
+			time=Dataset.time.values[boolean]))
+
+	else:
+		numerator = np.sum(Dataset[var_name]*np.cos(np.deg2rad(lats_3D)),axis=(1,2))
+		denominator = np.sum(np.cos(np.deg2rad(lats_3D)),axis=(1,2))		
+		weighted_area = numerator/denominator
+	return weighted_area
+    
+    
