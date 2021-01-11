@@ -2,3 +2,9 @@
 
 - Consider GFS Histograms: Discuss hypothesis that GFS is able to forecast RWPs on long range forecasts but only if the RWP is already initialized
 
+
+Writing results:
+- Interesting: Despite low values for E errors are very large near the subtropics.
+- Check: Is the reason why polar cp values are so low due to the fact that RWPs do not penetrate this areas?
+- Try to find evidence about non-conservative dynamics of wind speed biases in GEFS
+- Find main areas of rossby wave breaking

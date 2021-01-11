@@ -5,6 +5,24 @@ https://arxiv.org/pdf/1011.3564.pdf
 Souders et al 2014
 https://doi.org/10.1175/MWR-D-13-00371.1
 
+Chang and Yu 1999
+https://journals.ametsoc.org/view/journals/atsc/56/11/1520-0469_1999_056_1708_cowpit_2.0.co_2.xml?tab_body=fulltext-display
+
+- Phase speeds are slightly higher than zonal wind at 700 hpaover land while reverse is true over oceans
+- Group speed is smaller than zonal wind at 300 hpa
+- Significant correlation for RWPS between Europe and western North Pacific
+
+Chang 1999
+https://journals.ametsoc.org/view/journals/atsc/56/11/1520-0469_1999_056_1708_cowpit_2.0.co_2.xml?tab_body=fulltext-display
+- In Winter strongest zonal wind in subtropical jet. in summer more shifted towards the north and weaker
+- In winter storm tracks are split over Asia. In summer it is much more symmetric
+- Winter biggest phase speeds over Japan and Newfoundland. In summer largest values over Newfoundland and Himalayas
+
+Souders et al 2014
+https://journals.ametsoc.org/view/journals/mwre/142/10/mwr-d-13-00371.1.xml?tab_body=fulltext-display
+
+
+
 RWP forecasting
 Glatt and Wirth (2014)
 https://doi.org/10.1002/qj.2139

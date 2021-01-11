@@ -71,7 +71,7 @@ def weighted_average_area_2D(Dataset):
 	weighted_area = numerator/denominator
 	return weighted_area
 
-def weighted_average_area_3D(Dataset,variable):
+def weighted_average_area_3D(Dataset,variable,multiplier=0.2):
     #create 2D grid with latitude weights. 
 	lons,lats = np.meshgrid(Dataset.lon,Dataset.lat)
 	
@@ -82,14 +82,13 @@ def weighted_average_area_3D(Dataset,variable):
 	if variable=='phasespeed':
 		#Count number of not_nans in dataset for each timestep
 		counts_non_nan = np.count_nonzero(np.invert(np.isnan(Dataset[var_name].values)),axis=(1,2))
-		boolean = counts_non_nan > (len(lons)*len(lats))*0.2
+		boolean = counts_non_nan >= (len(lons)*len(lats))*multiplier
 		#Calculate latitude weighted mean only for timesteps where more than 25% of values are defined
 		numerator = np.nansum(Dataset[var_name][boolean,:,:]*np.cos(np.deg2rad(lats_3D[boolean,:,:])),axis=(1,2))
 		denominator = np.nansum(np.cos(np.deg2rad(lats_3D[boolean,:,:])),axis=(1,2))
 		weighted_area_np = numerator/denominator
-		weighted_area = xr.Dataset(data_vars=dict(
-			v=(['time'], weighted_area_np)),coords=dict(
-			time=Dataset.time.values[boolean]))
+		weighted_area = xr.DataArray(data=weighted_area_np,coords=dict(
+			time=Dataset.time.values[boolean]),dims='time')
 
 	else:
 		numerator = np.sum(Dataset[var_name]*np.cos(np.deg2rad(lats_3D)),axis=(1,2))
@@ -97,4 +96,4 @@ def weighted_average_area_3D(Dataset,variable):
 		weighted_area = numerator/denominator
 	return weighted_area
     
-    
+
