@@ -8,7 +8,8 @@ plot_dic = {
     'u_wind':{'data_variable':'u','title':'Zonal Wind','label':'u (m/s)','filename':'u_wind'},
     'v_wind':{'data_variable':'v','title':'Meridional Wind','label':'v (m/s)','filename':'v_wind'},
     'groupspeed':{'data_variable':'v','title':'Group Speed','label':'Cg (m/s)','filename':'groupspeed'},
-    'wavenumber':{'data_variable':'v','title':'Wave Number','label':'k (rad/m)','filename':'wavenumber'}
+    'wavenumber':{'data_variable':'v','title':'Wave Number','label':'k (rad/m)','filename':'wavenumber'},
+    'T850':{'data_variable':'t','title':'850 hPa Temperature','label':'T (°C)','filename':'T850'}
 }
 
 file_dic = {
@@ -21,7 +22,9 @@ file_dic = {
     'u_wind':{'ERA5':'era5_u300_79-19_6hourly.nc',
                'GFS':'gefsrf2_u300_control0-252h_6hourly_2x2_dec84-nov19.nc'},
     'wavenumber':{'ERA5':'era51_mars_k_wledit2000-10000_latavg_v300_envgt15_79-19_6hourly_setvrange_0to1.nc',
-                  'GFS':'gefsrf2_k_wledit2000-10000_latavg_v300_envgt15_control0-252h_6hourly_2x2_dec84-nov19_setvrange_0to1.nc'}
+                  'GFS':'gefsrf2_k_wledit2000-10000_latavg_v300_envgt15_control0-252h_6hourly_2x2_dec84-nov19_setvrange_0to1.nc'},
+    'T850':{'ERA5':'era51_mars_t850_79-19_6hourly.nc',
+           'GFS':'gefsrf2_t850_control0-252h_6hourly_2x2_dec84-nov19.nc'}
 }
 #The function below is used to convert real datetimes to hours sicne 1 Jan 1800 because GEFS data are in these units
 def convert_date_gefs(actual_time):
@@ -97,3 +100,38 @@ def weighted_average_area_3D(Dataset,variable,multiplier=0.2):
 	return weighted_area
     
 
+def detect_heatwaves(ds):
+    anom = ds.t
+    #create boolean array and return true if anomaly is positve (higher than 90th percentile)
+    anom_bool = anom>0
+    #convert boolean array to 0 and 1
+    iszero = np.concatenate(([0], np.equal(anom_bool.values, True).view(np.int8), [0]))
+    #create array where where start and end of anomaly is indicated by a 1 instead of 0
+    abs_diff = np.abs(np.diff(iszero))
+    idxz = np.where(abs_diff == 1)[0].reshape(-1, 2)
+    #Differentiate between persistent and short lived extremes
+    idx_bool_persistent = (idxz[:,1]-idxz[:,0])>=4
+    pot_hw_idxz_persistent = idxz[idx_bool_persistent,:]
+    persistent_datez = np.vstack((ds.time.values[pot_hw_idxz_persistent[:,0]],ds.time.values[pot_hw_idxz_persistent[:,1]])).T
+    idx_bool_short = (idxz[:,1]-idxz[:,0])<=2
+    pot_hw_idxz_short = idxz[idx_bool_short,:]
+    short_datez = np.vstack((ds.time.values[pot_hw_idxz_short[:,0]],ds.time.values[pot_hw_idxz_short[:,1]])).T
+    return persistent_datez, short_datez
+
+def detect_coldwaves(ds):
+    anom = ds.t
+    #create boolean array and return true if anomaly is negative (lower than 10th percentile)
+    anom_bool = anom<0
+    #convert boolean array to 0 and 1
+    iszero = np.concatenate(([0], np.equal(anom_bool.values, True).view(np.int8), [0]))
+    #create array where where start and end of anomaly is indicated by a 1 instead of 0
+    abs_diff = np.abs(np.diff(iszero))
+    idxz = np.where(abs_diff == 1)[0].reshape(-1, 2)
+    #Differentiate between persistent and short lived extremes
+    idx_bool_persistent = (idxz[:,1]-idxz[:,0])>=4
+    pot_hw_idxz_persistent = idxz[idx_bool_persistent,:]
+    persistent_datez = np.vstack((ds.time.values[pot_hw_idxz_persistent[:,0]],ds.time.values[pot_hw_idxz_persistent[:,1]])).T
+    idx_bool_short = (idxz[:,1]-idxz[:,0])<=2
+    pot_hw_idxz_short = idxz[idx_bool_short,:]
+    short_datez = np.vstack((ds.time.values[pot_hw_idxz_short[:,0]],ds.time.values[pot_hw_idxz_short[:,1]])).T
+    return persistent_datez, short_datez
