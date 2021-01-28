@@ -21,6 +21,11 @@ https://journals.ametsoc.org/view/journals/atsc/56/11/1520-0469_1999_056_1708_co
 Souders et al 2014
 https://journals.ametsoc.org/view/journals/mwre/142/10/mwr-d-13-00371.1.xml?tab_body=fulltext-display
 
+Laveyse et al 2018
+Predictability of the European heat and cold waves
+
+- Due to use of hindcasts no real changes in model performance over the years
+
 
 
 RWP forecasting

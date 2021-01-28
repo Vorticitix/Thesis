@@ -109,13 +109,16 @@ def detect_heatwaves(ds):
     #create array where where start and end of anomaly is indicated by a 1 instead of 0
     abs_diff = np.abs(np.diff(iszero))
     idxz = np.where(abs_diff == 1)[0].reshape(-1, 2)
-    #Differentiate between persistent and short lived extremes
+    #Persistent extremes
     idx_bool_persistent = (idxz[:,1]-idxz[:,0])>=4
     pot_hw_idxz_persistent = idxz[idx_bool_persistent,:]
-    persistent_datez = np.vstack((ds.time.values[pot_hw_idxz_persistent[:,0]],ds.time.values[pot_hw_idxz_persistent[:,1]])).T
+    #subtract 1 day to set end date at last day of temp extreme
+    persistent_datez = np.vstack((ds.time.values[pot_hw_idxz_persistent[:,0]],ds.time.values[pot_hw_idxz_persistent[:,1]]-pd.Timedelta(1,'days'))).T
+    #short lived extremes
     idx_bool_short = (idxz[:,1]-idxz[:,0])<=2
     pot_hw_idxz_short = idxz[idx_bool_short,:]
-    short_datez = np.vstack((ds.time.values[pot_hw_idxz_short[:,0]],ds.time.values[pot_hw_idxz_short[:,1]])).T
+    #subtract 1 day to set end date at last day of temp extreme
+    short_datez = np.vstack((ds.time.values[pot_hw_idxz_short[:,0]],ds.time.values[pot_hw_idxz_short[:,1]]-pd.Timedelta(1,'days'))).T
     return persistent_datez, short_datez
 
 def detect_coldwaves(ds):
@@ -130,8 +133,8 @@ def detect_coldwaves(ds):
     #Differentiate between persistent and short lived extremes
     idx_bool_persistent = (idxz[:,1]-idxz[:,0])>=4
     pot_hw_idxz_persistent = idxz[idx_bool_persistent,:]
-    persistent_datez = np.vstack((ds.time.values[pot_hw_idxz_persistent[:,0]],ds.time.values[pot_hw_idxz_persistent[:,1]])).T
+    persistent_datez = np.vstack((ds.time.values[pot_hw_idxz_persistent[:,0]],ds.time.values[pot_hw_idxz_persistent[:,1]]-pd.Timedelta(1,'days'))).T
     idx_bool_short = (idxz[:,1]-idxz[:,0])<=2
     pot_hw_idxz_short = idxz[idx_bool_short,:]
-    short_datez = np.vstack((ds.time.values[pot_hw_idxz_short[:,0]],ds.time.values[pot_hw_idxz_short[:,1]])).T
+    short_datez = np.vstack((ds.time.values[pot_hw_idxz_short[:,0]],ds.time.values[pot_hw_idxz_short[:,1]]-pd.Timedelta(1,'days'))).T
     return persistent_datez, short_datez
