@@ -25,6 +25,11 @@ Laveyse et al 2018
 Predictability of the European heat and cold waves
 
 - Due to use of hindcasts no real changes in model performance over the years
+- NWP does better for cold extremes in winter than for hot extremes in summer
+- Onset and end of temp extremes are harder to predict
+- Heatwaves have shorter predictability than cold waves
+- Predicitng temp extremes show significant benefits up till 14 days. Forecasts up to 7 days are defined as robust
+
 
 
 

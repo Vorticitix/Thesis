@@ -138,3 +138,54 @@ def detect_coldwaves(ds):
     pot_hw_idxz_short = idxz[idx_bool_short,:]
     short_datez = np.vstack((ds.time.values[pot_hw_idxz_short[:,0]],ds.time.values[pot_hw_idxz_short[:,1]]-pd.Timedelta(1,'days'))).T
     return persistent_datez, short_datez
+
+def gilbert_skill_score(hits,miss,false_alarm,non_event):
+    hitsc = (hits + miss)*(hits+false_alarm)/(hits+miss+non_event+false_alarm)
+    GSS = (hits-hitsc)/(hits+miss+false_alarm-hitsc)
+    return GSS
+
+def gilbert_skill_score_dataframe(df):
+    hits = df['hits']
+    miss = df['miss']
+    false_alarm = df['false_alarm']
+    non_event = df['non_event']
+    hitsc = (hits + miss)*(hits+false_alarm)/(hits+miss+non_event+false_alarm)
+    GSS = (hits-hitsc)/(hits+miss+false_alarm-hitsc)
+    return(GSS)
+    
+
+#the function below yields the same results as ydaysub from the cdo framework
+def calculate_anomalies(multi_year,climatology):
+    #make a copy of forecast/reanalysis and climatology timeseries to alternate there time data
+    multi_year_alt = multi_year.load().copy()
+    clim_new_time = climatology.load().copy()
+    #convert time data of climatology to dayofyear (1 = 1 Jan, 366 = 31 December)
+    clim_new_time['time'] = clim_new_time.load().time.dt.dayofyear
+    #create empty list to add every individual year
+    multi_year_total = []
+    #loop over all years in data and select individual years from data
+    for year in range(multi_year.time.dt.year.values.min(),multi_year.time.dt.year.values.max()+1):
+        #select individual years from data
+        year_sub = multi_year.sel(time=slice(pd.Timestamp('{}-01-01'.format(year)),
+                                pd.Timestamp('{}-12-31'.format(year))))
+        #copy subsetted data to alternate time data
+        year_sub_new_time = year_sub.copy()
+        #Convert time data to from timestamp to dayofyear
+        if year%4!=0:
+            # if year is not a leap year the dayofyear numbers do not exactly match the climatology because Feb 29th is not present
+            # To account for this we skip th 59th day (which would be Feb 29 in a leap year) and add 1 day to day number thereafter
+            year_sub_new_time['time'] = [i+1 if i>59 else i for i in year_sub_new_time.time.dt.dayofyear.values]
+        else:
+            #During a leap year the method is straightforward to convert to daynumber
+            year_sub_new_time['time'] = year_sub_new_time.time.dt.dayofyear
+        #calculate the anomalies
+        #every single day from the year subset is substracted with the value in the climatology with the same day number
+        #So in non leap years Feb 29th in the climatology data is skipped
+        anom_sub = year_sub_new_time - clim_new_time
+        #replace absolute temperatures with anomalies in the year subset data. Now we also have normal dates as time data again
+        year_sub.t.values = anom_sub.t.values
+        #add year subset to list
+        multi_year_total.append(year_sub)
+    #concatenate all objects in list along datetime axis
+    multi_year_anom = xr.concat(multi_year_total,dim='time')
+    return multi_year_anom
