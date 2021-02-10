@@ -30,8 +30,18 @@ Predictability of the European heat and cold waves
 - Heatwaves have shorter predictability than cold waves
 - Predicitng temp extremes show significant benefits up till 14 days. Forecasts up to 7 days are defined as robust
 
+Wulff & Domeisen 2019
+Higher Subseasonal Predictability of Extreme Hot European Summer Temperatures as Compared to Average Summer
 
+- ECMWF better at forecasting heatwaves than other models
+- Predictability of warm near surface extremes is higher than for weather around the mean
+- European summer warm extremes are better predicted than winter cold extremes for ECMWF. Especially for Russia.
+- Very extreme and persistent events may increase predictability in a strong way
 
+Wehrli et al 2019
+Identifying Key Driving Processes of Major Recent Heat Waves
+
+- Circulation is a major contributor to major heatwaves in recent years.
 
 RWP forecasting
 Glatt and Wirth (2014)

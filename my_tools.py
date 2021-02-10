@@ -24,7 +24,11 @@ file_dic = {
     'wavenumber':{'ERA5':'era51_mars_k_wledit2000-10000_latavg_v300_envgt15_79-19_6hourly_setvrange_0to1.nc',
                   'GFS':'gefsrf2_k_wledit2000-10000_latavg_v300_envgt15_control0-252h_6hourly_2x2_dec84-nov19_setvrange_0to1.nc'},
     'T850':{'ERA5':'era51_mars_t850_79-19_6hourly.nc',
-           'GFS':'gefsrf2_t850_control0-252h_6hourly_2x2_dec84-nov19.nc'}
+           'GFS':'gefsrf2_t850_control0-252h_6hourly_2x2_dec84-nov19.nc',
+           'ERA5RF':'era5rf_t850_0-240h_12hourly_2x2nh_jan79-dec19.nc'},
+    'T850_grid':{'ERA5':'era51_fldmean_mars_t850_79-19_24hourly_lon_{}_{}_lat_{}_{}.nc',
+                'GFS':'gefsrf2_fldmean_t850_control0-252h_24hourly_lon_{}_{}_lat_{}_{}.nc',
+                'ERA5RF':'era5rf_fldmean_t850_0-240h_24hourly_2x2nh_dec84-nov19_lon_{}_{}_lat_{}_{}.nc'}
 }
 #The function below is used to convert real datetimes to hours sicne 1 Jan 1800 because GEFS data are in these units
 def convert_date_gefs(actual_time):
