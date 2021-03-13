@@ -15,11 +15,13 @@ plot_dic = {
 file_dic = {
     'envelope':{'ERA5':'era51_mars_env_wledit2000-10000_latavg_v300_79-19_6hourly_smoothed.nc',
                'GFS':'gefsrf2_env_wledit2000-10000_latavg_v300_control0-252h_6hourly_2x2_dec84-nov19.nc',
-               'CFS':'cfsr-cfsv2_env_wledit2000-10000_latavg_v300_79-19_6hourly_anom_from_smoothed04_clim_smoothed.nc'},
+               'CFS':'cfsr-cfsv2_env_wledit2000-10000_latavg_v300_79-19_6hourly_anom_from_smoothed04_clim_smoothed.nc',
+               'ERA5RF':'era5rf_env_wledit2000-10000_latavg_v300_0-240h_12hourly_2x2nh_jan79-dec19.nc'},
     'phasespeed':{'ERA5':'era51_mars_phasevel_wledit2000-10000_latavg_v300_envgt15_79-19_6hourly_setvrange_-100to100.nc',
                'GFS':'gefsrf2_phasevel_wledit2000-10000_latavg_v300_envgt15_control0-252h_6hourly_2x2_dec84-nov19_setvrange_-100to100.nc',
-               'CFS':'cfsr-cfsv2_phasevel_wledit2000-10000_latavg_v300_envgt15_79-19_6hourly_anom_from_smoothed04_clim_setvrange_-100to100.nc'},
-    'u_wind':{'ERA5':'era5_u300_79-19_6hourly.nc',
+               'CFS':'cfsr-cfsv2_phasevel_wledit2000-10000_latavg_v300_envgt15_79-19_6hourly_anom_from_smoothed04_clim_setvrange_-100to100.nc',
+               'ERA5RF':'era5rf_phasevel_wledit2000-10000_latavg_v300_envgt15_0-120h_6hourly_2x2nh_jan79-dec19_setvrange_-100to100.nc'},
+    'u_wind':{'ERA5':'era51_mars_u300_79-19_6hourly.nc',
                'GFS':'gefsrf2_u300_control0-252h_6hourly_2x2_dec84-nov19.nc'},
     'wavenumber':{'ERA5':'era51_mars_k_wledit2000-10000_latavg_v300_envgt15_79-19_6hourly_setvrange_0to1.nc',
                   'GFS':'gefsrf2_k_wledit2000-10000_latavg_v300_envgt15_control0-252h_6hourly_2x2_dec84-nov19_setvrange_0to1.nc'},
@@ -28,7 +30,9 @@ file_dic = {
            'ERA5RF':'era5rf_t850_0-240h_12hourly_2x2nh_jan79-dec19.nc'},
     'T850_grid':{'ERA5':'era51_fldmean_mars_t850_79-19_24hourly_lon_{}_{}_lat_{}_{}.nc',
                 'GFS':'gefsrf2_fldmean_t850_control0-252h_24hourly_lon_{}_{}_lat_{}_{}.nc',
-                'ERA5RF':'era5rf_fldmean_t850_0-240h_24hourly_2x2nh_dec84-nov19_lon_{}_{}_lat_{}_{}.nc'}
+                'ERA5RF':'era5rf_fldmean_t850_0-240h_24hourly_2x2nh_dec84-nov19_lon_{}_{}_lat_{}_{}.nc'},
+    'Z500':{'ERA5':'era51_mars_phi500_79-19_6hourly.nc'},
+    'MSLP':{'ERA5':'era5_mslp_79-19_6hourly_remapbil2x2.nc'}
 }
 #The function below is used to convert real datetimes to hours sicne 1 Jan 1800 because GEFS data are in these units
 def convert_date_gefs(actual_time):
@@ -76,6 +80,8 @@ def weighted_average_area_2D(Dataset):
 	numerator = np.sum(Dataset[var_name]*np.cos(np.deg2rad(lats)))
 	denominator = np.sum(np.cos(np.deg2rad(lats)))
 	weighted_area = numerator/denominator
+	if Dataset[var_name].count()/len(Dataset[var_name])**2<0.2:
+		weighted_area = np.nan
 	return weighted_area
 
 def weighted_average_area_3D(Dataset,variable,multiplier=0.2):
@@ -91,11 +97,12 @@ def weighted_average_area_3D(Dataset,variable,multiplier=0.2):
 		counts_non_nan = np.count_nonzero(np.invert(np.isnan(Dataset[var_name].values)),axis=(1,2))
 		boolean = counts_non_nan >= (len(lons)*len(lats))*multiplier
 		#Calculate latitude weighted mean only for timesteps where more than 25% of values are defined
-		numerator = np.nansum(Dataset[var_name][boolean,:,:]*np.cos(np.deg2rad(lats_3D[boolean,:,:])),axis=(1,2))
-		denominator = np.nansum(np.cos(np.deg2rad(lats_3D[boolean,:,:])),axis=(1,2))
+		numerator = np.nansum(Dataset[var_name][:,:,:]*np.cos(np.deg2rad(lats_3D[:,:,:])),axis=(1,2))
+		denominator = np.nansum(np.cos(np.deg2rad(lats_3D[:,:,:])),axis=(1,2))
 		weighted_area_np = numerator/denominator
+		weighted_area_np[np.invert(boolean)]=np.nan
 		weighted_area = xr.DataArray(data=weighted_area_np,coords=dict(
-			time=Dataset.time.values[boolean]),dims='time')
+			time=Dataset.time.values),dims='time')
 
 	else:
 		numerator = np.sum(Dataset[var_name]*np.cos(np.deg2rad(lats_3D)),axis=(1,2))
