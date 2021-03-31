@@ -200,3 +200,17 @@ def calculate_anomalies(multi_year,climatology):
     #concatenate all objects in list along datetime axis
     multi_year_anom = xr.concat(multi_year_total,dim='time')
     return multi_year_anom
+
+#For a given boolean array with anomalies and non anomalous values detect length of longest consecutive True values
+#I assume here that maximum length of consecutive true values resembles extreme duration
+def max_len_boolean_array(array):
+    #create boolean array where True inidcates non-zero values
+    iszero = np.concatenate(([0], np.equal(array, True).view(np.int8), [0]))
+    #indicate at which indices the value changes from True to False or vice versa. Convert to 2D array to se longest consecutive series of True values
+    abs_diff = np.abs(np.diff(iszero))
+    idx_2D = np.where(abs_diff == 1)[0].reshape(-1, 2)
+    diff = idx_2D[:,1]-idx_2D[:,0]
+    #caluclate longest consecutive series of true Values. Add one because the last day counts as well
+    max_length = np.max(diff)+1
+    return max_length
+    
