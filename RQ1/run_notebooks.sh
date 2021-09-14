@@ -1,2 +1,2 @@
-runipy Calc_ERA5RF_mean_errors.ipynb
-runipy Calc_ERA5RF_mean_errors_season.ipynb
+runipy Calc_GFS_mean_errors.ipynb
+runipy Calc_GFS_mean_errors_season.ipynb
