@@ -1,0 +1,1 @@
+/media/onno/Algemeen/Thesis/GFS_T850/timeseries.sh
