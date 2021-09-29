@@ -196,6 +196,10 @@ def gilbert_skill_score(hits,miss,false_alarm,non_event):
     GSS = (hits-hitsc)/(hits+miss+false_alarm-hitsc)
     return GSS
 
+def hansen_kuiper_discrimant(hits,miss,false_alarm,non_event):
+	HK = hits/(hits+miss)-false_alarm/(false_alarm+non_event)
+	return HK
+
 def gilbert_skill_score_dataframe(df):
     hits = df['hits']
     miss = df['miss']
