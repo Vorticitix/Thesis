@@ -258,4 +258,18 @@ def max_len_boolean_array(array):
     #caluclate longest consecutive series of true Values. Add one because the last day counts as well
     max_length = np.max(diff)+1
     return max_length
+
+#Calculate average of grid cell in a matrix based on its 8 neighbouring grid cells
+#Works for 2D numpy arrays only
+def average_2D_matrix(old_array):
+    array=old_array.copy()
+    #get shape of 2D
+    y,x = array.shape
+    for i in range(1,x-1):
+        print(i)
+        for j in range(1,y-1):
+            array[j,i]=np.average(array[j-1:j+2,i-1:i+2])
+    array[0,:]=np.nan;array[y-1,:]=np.nan;array[:,0]=np.nan;array[:,x-1]=np.nan
+    print(array)
+    return array
     
