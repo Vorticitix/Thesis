@@ -272,4 +272,22 @@ def average_2D_matrix(old_array):
     array[0,:]=np.nan;array[y-1,:]=np.nan;array[:,0]=np.nan;array[:,x-1]=np.nan
     print(array)
     return array
+
+def dataset_3D_to_4D(ds,N_days=13):
+    N = len(ds.time.values)//N_days
+    var = list(ds.keys())[0]
+    arr = ds[var].values
+    arr_new = arr.reshape(arr.shape[0]//N_days,N_days,
+                          arr.shape[1],arr.shape[2])
+    ds_new = xr.Dataset(
+            data_vars={
+                var:(["N", "days", "latitude","longitude"], arr_new)
+            },
+            coords={
+                'N':np.arange(1,arr.shape[0]//N_days+1),
+                'days':np.arange(1,N_days+1),
+                'longitude':ds.longitude,
+                'latitude':ds.latitude,
+            })
+    return ds_new
     
