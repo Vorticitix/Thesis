@@ -267,7 +267,7 @@ def average_2D_matrix(old_array):
     y,x = array.shape
     for i in range(1,x-1):
         for j in range(1,y-1):
-            array[j,i]=np.average(array[j-1:j+2,i-1:i+2])
+            array[j,i]=np.nanmean(array[j-1:j+2,i-1:i+2])
     array[0,:]=np.nan;array[y-1,:]=np.nan;array[:,0]=np.nan;array[:,x-1]=np.nan
     return array
 
@@ -283,7 +283,7 @@ def dataset_3D_to_4D(ds,N_days=13):
             },
             coords={
                 'N':np.arange(1,arr.shape[0]//N_days+1),
-                'days':np.arange(1,N_days+1),
+                'days':ds.time.values[:N_days],
                 'longitude':ds.longitude,
                 'latitude':ds.latitude,
             })
