@@ -32,9 +32,9 @@ file_dic = {
     'T850':{'ERA5':'era51_mars_t850_79-19_6hourly.nc',
            'GFS':'gefsrf2_t850_control0-252h_6hourly_2x2_dec84-nov19.nc',
            'ERA5RF':'era5rf_t850_0-240h_12hourly_2x2nh_jan79-dec19.nc'},
-    'T850_grid':{'ERA5':'era51_fldmean_mars_t850_79-19_24hourly_lon_{}_{}_lat_{}_{}.nc',
+    'T850_grid':{'ERA5':'era51_fldmean_mars_t850_79-19_24hourly_lon_{}_{}_lat_{}_{}_ALL.nc',
                 'GFS':'gefsrf2_fldmean_t850_control0-252h_24hourly_lon_{}_{}_lat_{}_{}.nc',
-                'ERA5RF':'era5rf_fldmean_t850_0-240h_24hourly_2x2nh_dec84-nov19_lon_{}_{}_lat_{}_{}.nc'},
+                'ERA5RF':'era5rf_fldmean_t850_0-240h_24hourly_2x2nh_dec84-nov19_lon_{}_{}_lat_{}_{}_ALL.nc'},
     'Z500':{'ERA5':'era51_mars_phi500_79-19_6hourly.nc'},
     'MSLP':{'ERA5':'era5_mslp_79-19_6hourly_remapbil2x2.nc'}
 }
