@@ -271,7 +271,7 @@ def average_2D_matrix(old_array):
     array[0,:]=np.nan;array[y-1,:]=np.nan;array[:,0]=np.nan;array[:,x-1]=np.nan
     return array
 
-def dataset_3D_to_4D(ds,N_days=13):
+def dataset_3D_to_4D(ds,N_days=18):
     N = len(ds.time.values)//N_days
     var = list(ds.keys())[0]
     arr = ds[var].values
