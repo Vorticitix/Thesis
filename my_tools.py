@@ -13,7 +13,7 @@ plot_dic = {
 }
 
 file_dic = {
-    'envelope':{'ERA5':'era51_mars_env_wledit2000-10000_latavg_v300_79-19_6hourly_smoothed.nc',
+    'envelope':{'ERA5':'era5_mars_env_wledit2000-10000_latavg_v300_79-19_12hourly_smoothed.nc',
                'GFS':'gefsrf2_env_wledit2000-10000_latavg_v300_control0-252h_6hourly_2x2_dec84-nov19.nc',
                'CFS':'cfsr-cfsv2_env_wledit2000-10000_latavg_v300_79-19_6hourly_anom_from_smoothed04_clim_smoothed.nc',
                'ERA5RF':'era5rf_env_wledit2000-10000_latavg_v300_0-240h_12hourly_2x2nh_jan79-dec19.nc'},
@@ -29,13 +29,13 @@ file_dic = {
              'ERA5RF':'era5rf_v300_0-240h_12hourly_2x2nh_jan79-dec19.nc'},
     'wavenumber':{'ERA5':'era51_mars_k_wledit2000-10000_latavg_v300_envgt15_79-19_6hourly_setvrange_0to1.nc',
                   'GFS':'gefsrf2_k_wledit2000-10000_latavg_v300_envgt15_control0-252h_6hourly_2x2_dec84-nov19_setvrange_0to1.nc'},
-    'T850':{'ERA5':'era51_mars_t850_79-19_6hourly.nc',
+    'T850':{'ERA5':'era5_mars_t850_79-19_12hourly.nc',
            'GFS':'gefsrf2_t850_control0-252h_6hourly_2x2_dec84-nov19.nc',
            'ERA5RF':'era5rf_t850_0-240h_12hourly_2x2nh_jan79-dec19.nc'},
-    'T850_grid':{'ERA5':'era51_fldmean_mars_t850_79-19_24hourly_lon_{}_{}_lat_{}_{}_ALL.nc',
+    'T850_grid':{'ERA5':'era5_fldmean_mars_t850_79-19_24hourly_lon_{}_{}_lat_{}_{}_ALL.nc',
                 'GFS':'gefsrf2_fldmean_t850_control0-252h_24hourly_lon_{}_{}_lat_{}_{}.nc',
-                'ERA5RF':'era5rf_fldmean_t850_0-240h_24hourly_2x2nh_dec84-nov19_lon_{}_{}_lat_{}_{}_ALL.nc'},
-    'Z500':{'ERA5':'era51_mars_phi500_79-19_6hourly.nc'},
+                'ERA5RF':'era5rf_fldmean_t850_0-240h_24hourly_2x2nh_jan79-dec19_lon_{}_{}_lat_{}_{}_ALL_NEW.nc'},
+    'Z500':{'ERA5':'era5_mars_phi500_79-19_12hourly.nc'},
     'MSLP':{'ERA5':'era5_mslp_79-19_6hourly_remapbil2x2.nc'}
 }
 #The function below is used to convert real datetimes to hours sicne 1 Jan 1800 because GEFS data are in these units
